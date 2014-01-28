@@ -3,6 +3,13 @@
 module StringMetric
   module Levenshtein
     class IterativeWithTwoMatrixRows
+      optimal_min = if RUBY_ENGINE == "ruby"
+        "sort!; x = x[0]"
+      else
+        "min"
+      end
+
+      def_distance = <<-END
       def self.distance(from, to, options = {})
         return 0 if from == to
         return to.size if from.size.zero?
@@ -33,7 +40,7 @@ module StringMetric
             x = [x + deletion_cost,         # deletion
                  ins_cell + insertion_cost, # insertion
                  sub_cell + cost            # substitution
-                ].min
+                ].#{optimal_min}
 
 
             v1[j + 1] = x
@@ -52,6 +59,9 @@ module StringMetric
           x
         end
       end
+      END
+
+      eval(def_distance)
     end
   end
 end
