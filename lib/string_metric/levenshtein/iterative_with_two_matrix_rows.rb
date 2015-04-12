@@ -41,7 +41,7 @@ module StringMetric
             sub_cell = ins_cell
           end
 
-          break if max_distance && v0[i] > max_distance
+          break if max_distance && v0.min > max_distance
 
           v0 = v1.dup
         end
